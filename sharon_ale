@@ -1,3 +1,7 @@
+
+ESTE ES EL CODIGO DE COMPONENTE 'GOOGLE.JS '
+
+
 import React, { useState, useEffect } from 'react';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
@@ -54,3 +58,119 @@ const Google = () => {
 };
 
 export default Google;
+
+
+
+
+
+ESTE ES MI CODIGO DE COMPONENTE 'APP.JS '
+
+
+
+import './App.css';
+import Fecha from './Componentes/Fecha';
+import Datos from './Componentes/Datos';
+import React, { useState} from 'react';
+import ComponenteForm from './Componentes/Form';
+import EdadPerro from './Componentes/ComponenteEdadP';
+import Contador from './Componentes/ComponenteCont';
+import RickandMorty from './Componentes/RickandMorty';
+import PokemonSearch  from './Componentes/PokemonSearch';
+import ComponenteCorreo from './Componentes/FireBase/ComponenteCorreo';
+import Google from './Componentes/FireBase/Google';
+
+
+function App() {
+  const [operaciones, setOperacion] = useState([])
+  function calcular(event){
+    event.preventDefault();
+    const edadH = parseInt(event.target.valor1.value, 10)
+    const edadP = (edadH) * 7
+    const nuevo = {
+      resultado: edadP,
+      valor1: edadH
+    }
+    setOperacion([nuevo,...operaciones])
+    event.target.valor1.value='';
+  }
+  const [datos, setDatos] = useState({nombre: '', materia:''})
+  const [isAgeModuleEnabled, setAgeModuleEnabled] = useState (false);
+  const [isDateModuleEnabled, setDateModuleEnabled] = useState (false);
+  const [isFormModuleEnabled, setFormModuleEnabled] = useState (false);
+  
+  const toggleAgeModule=()=>{
+    setAgeModuleEnabled (!isAgeModuleEnabled);
+  };
+  const toggleDateModule=()=>{
+    setDateModuleEnabled (!isDateModuleEnabled);
+  };
+  const toggleFormModule = () => {
+    setFormModuleEnabled (!isFormModuleEnabled);
+  };
+
+  const handleFormSubmit =(data) =>{
+    setDatos(data);
+  }
+
+  return(
+    <section id='General'>
+    <div>
+      <h1 id='encabezado'>Hola esta es mi practica en React</h1>
+
+      <button className='my-button' onClick={toggleAgeModule}>
+        {isAgeModuleEnabled ? 'Deshabilitar Módulo Edad Canina' : 'Habilitar Módulo Edad Canina'}
+      </button>
+      {isAgeModuleEnabled && <><form onSubmit={calcular}>
+        <p>Ingrese su edad: <input type="text" name="valor1" /></p>
+        <input className='my-button' type="submit" value="Calcular" />
+      </form><EdadPerro resultados={operaciones} /></>}
+
+      <button className='my-button' onClick={toggleDateModule}>
+        {isDateModuleEnabled ? 'Deshabilitar Módulo Fecha' : 'Habilitar Módulo Fecha'}
+      </button>
+      {isDateModuleEnabled && <Fecha/>}
+
+      <button className='my-button' onClick={toggleFormModule}>
+        {isFormModuleEnabled ? 'Deshabilitar Módulo Formulario' : 'Habilitar Módulo Formulario'}
+      </button>
+      {isFormModuleEnabled && <><ComponenteForm onFormSubmit={handleFormSubmit} /><Datos nombre={datos.nombre} materia={datos.materia} /></>}
+
+ <div>
+      < RickandMorty />
+      </div>
+
+      <div>
+      <PokemonSearch/>
+      </div>
+      <button className='my-button' onClick={toggleFormModule}>
+        {isFormModuleEnabled ? 'BUSCAR' : 'BUSCAR '}
+      </button> 
+      
+    
+    <h1> Correo Electronico </h1>
+
+      <div>
+      <ComponenteCorreo/>
+      </div>
+
+    <div>
+      
+      <h2 id='encabezado'>DE CLICK CONTINUAR</h2>
+      <Contador/>
+      
+    </div>
+  
+   
+    <div>
+      <h1> Puedes ingresar con Google </h1>
+      <Google/>
+    </div>
+    </div>
+    
+
+    </section>
+  
+  )
+}
+export default App;
+
