@@ -1,0 +1,56 @@
+import React, { useState, useEffect } from 'react';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyArsTtN2sl9f5o5rn76AIHo90Hi7MXzV0M",
+  authDomain: "login15601-15946.firebaseapp.com",
+  projectId: "login15601-15946",
+  storageBucket: "login15601-15946.appspot.com",
+  messagingSenderId: "947415247332",
+  appId: "1:947415247332:web:ef10a8ca74687b82153ff1"
+};
+
+const app = initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
+
+const Google = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged((authUser) => {
+      if (authUser) {
+        setUser(authUser);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const signInWithGoogle = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider);
+  };
+
+  const signOut = () => {
+    firebase.auth().signOut();
+  };
+
+  return (
+    <div>
+      {user ? (
+        <div>
+          <p >Hola,  {user.displayName}!</p>
+          <p></p><button className="custom-button" onClick={signOut}>Cerrar sesion</button>
+        </div>
+      ) : (
+        <button className="custom-button" onClick={signInWithGoogle}>Iniciar sesion con Google</button>
+      )}
+    </div>
+  );
+};
+
+export default Google;
